@@ -1,0 +1,27 @@
+version: 0.2
+
+phases:
+  pre_build:
+    commands:
+      - echo Logging in to Amazon ECR...
+      - aws ecr get-login-password --region ap-south-1 | docker login --username
+        AWS --password-stdin 475820189615.dkr.ecr.ap-south-1.amazonaws.com
+  build:
+    commands:
+      - echo Build started on `date`
+      - echo Building the Docker image...
+      - docker build -t cars-in-repo .
+      - docker tag cars-in-repo:latest
+        475820189615.dkr.ecr.ap-south-1.amazonaws.com/cars-in-repo:latest
+  post_build:
+    commands:
+      - echo Build completed on `date`
+      - echo Pushing the Docker image to ECR...
+      - docker push
+        475820189615.dkr.ecr.ap-south-1.amazonaws.com/cars-in-repo:latest
+      - echo Writing image definitions file...
+      - printf '[{"name":"cars-in-container","imageUri":"%s"}]'
+        475820189615.dkr.ecr.ap-south-1.amazonaws.com/cars-in-repo:latest >
+        imagedefinitions.json
+artifacts:
+  files: imagedefinitions.json
