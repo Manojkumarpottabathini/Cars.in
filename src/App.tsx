@@ -5,6 +5,7 @@ import { LandingPage } from '@/pages/LandingPage';
 import { LoginPage } from '@/pages/LoginPage';
 import { Dashboard } from '@/pages/Dashboard';
 import { supabase } from '@/lib/supabase';
+import ChatWidget from './ChatWidget';
 
 type Page = 'home' | 'login' | 'dashboard';
 
